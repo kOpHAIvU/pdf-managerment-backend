@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: pdf-desk-backend
+  graphql:
+    graphiql:
+      enabled: true
+
+server:
+  port: 8080
