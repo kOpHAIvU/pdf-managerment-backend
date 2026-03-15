@@ -1,22 +1,28 @@
 type User {
-  id: String
+  userId: String
   email: String
-  name: String
+  provider: String
   createdAt: String
 }
 
-input UserInput {
-  id: String
-  email: String
-  name: String
-  createdAt: String
-}
-
-type Query {
-  getUser(id: String!): User
+type AuthPayload {
+  token: String
+  user: User
 }
 
 type Mutation {
-  createUser(user: UserInput!): Boolean
-  deleteUser(id: String!): Boolean
+
+  login(
+    email: String!
+    password: String!
+  ): AuthPayload
+
+  register(
+    email: String!
+    password: String!
+  ): AuthPayload
+
+  loginWithGoogle(
+    idToken: String!
+  ): AuthPayload
 }
