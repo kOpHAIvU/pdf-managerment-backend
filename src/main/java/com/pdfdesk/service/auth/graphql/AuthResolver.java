@@ -2,23 +2,30 @@ package com.pdfdesk.service.auth.graphql;
 
 import com.pdfdesk.service.auth.dto.AuthPayload;
 import com.pdfdesk.service.auth.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.stereotype.Controller;
 
+@Controller
+@RequiredArgsConstructor
+@Slf4j
 public class AuthResolver {
   private final AuthService authService;
 
-  public AuthResolver(AuthService authService) {
-    this.authService = authService;
-  }
-
-  public AuthPayload login(String email, String password) {
+  @MutationMapping
+  public AuthPayload login(@Argument String email, @Argument String password) {
     return authService.login(email, password);
   }
 
-  public AuthPayload loginWithGoogle(String idToken) {
+  @MutationMapping
+  public AuthPayload loginWithGoogle(@Argument String idToken) {
     return authService.loginWithGoogle(idToken);
   }
 
-  public AuthPayload register(String email, String password) {
-    return authService.register(email, password);
+  @MutationMapping
+  public AuthPayload register(@Argument String fullName, @Argument String email, @Argument String password) {
+    return authService.register(fullName, email, password);
   }
 }

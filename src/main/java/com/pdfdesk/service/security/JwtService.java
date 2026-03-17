@@ -3,22 +3,27 @@ package com.pdfdesk.service.security;
 import com.pdfdesk.service.users.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class JwtService {
-
-  private final String SECRET = "secret-key";
+  private final String SECRET = "c2VjcmV0LWtleS1zZWNyZXQta2V5LXNlY3JldC1rZXktMTIzNDU2";
+  private final SecretKey key = Keys.hmacShaKeyFor(
+          java.util.Base64.getUrlDecoder().decode(SECRET)
+  );
 
   public String generateToken(User user) {
-
     return Jwts.builder()
-            .setSubject(user.getId())
+            .subject(user.getId())
             .claim("email", user.getEmail())
-            .setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, SECRET)
+            .issuedAt(new Date())
+            .signWith(key)
             .compact();
   }
 }

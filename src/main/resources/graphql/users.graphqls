@@ -1,6 +1,7 @@
 type User {
-  userId: String
+  id: String
   email: String
+  fullName: String
   provider: String
   createdAt: String
 }
@@ -10,19 +11,14 @@ type AuthPayload {
   user: User
 }
 
+type Query {
+  me: User
+}
+
 type Mutation {
+  login(email: String!, password: String!): AuthPayload
 
-  login(
-    email: String!
-    password: String!
-  ): AuthPayload
+  register(fullName: String!, email: String!, password: String!): AuthPayload
 
-  register(
-    email: String!
-    password: String!
-  ): AuthPayload
-
-  loginWithGoogle(
-    idToken: String!
-  ): AuthPayload
+  loginWithGoogle(idToken: String!): AuthPayload
 }

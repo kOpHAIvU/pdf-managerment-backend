@@ -13,18 +13,4 @@ public class UserService {
   public void createUser(User user) {
     repository.save(user);
   }
-
-  public User getUser(String id) {
-    User user = repository.findById(id);
-
-    if (user == null) {
-      throw new RuntimeException("User not found with id = " + id);
-    }
-
-    return user;
-  }
-
-  public void deleteUser(String id) {
-    repository.delete(id);
-  }
 }

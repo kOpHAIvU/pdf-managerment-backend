@@ -4,6 +4,7 @@ import com.pdfdesk.service.users.model.User;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
+
 @Repository
 public class UserRepository {
   private final DynamoDbTable<User> table;

@@ -20,15 +20,15 @@ public class UserController {
   public void createUser(@Argument User user) {
     userService.createUser(user);
   }
-
-  @QueryMapping
-  public User getUser(@Argument String id) {
-    return userService.getUser(id);
-  }
-
-  @MutationMapping
-  public Boolean deleteUser(@Argument String id) {
-    userService.deleteUser(id);
-    return true;
-  }
+//
+//  @QueryMapping
+//  public User getUser(@Argument String id) {
+//    return userService.getUser(id);
+//  }
+//
+//  @MutationMapping
+//  public Boolean deleteUser(@Argument String id) {
+//    userService.deleteUser(id);
+//    return true;
+//  }
 }
