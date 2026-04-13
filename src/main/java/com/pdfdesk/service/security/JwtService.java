@@ -23,7 +23,22 @@ public class JwtService {
             .subject(user.getId())
             .claim("email", user.getEmail())
             .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + 86_400_000))
             .signWith(key)
             .compact();
+  }
+
+  public String extractUserId(String token) {
+    try {
+      return Jwts.parser()
+          .verifyWith(key)
+          .build()
+          .parseSignedClaims(token)
+          .getPayload()
+          .getSubject();
+    } catch (Exception ex) {
+      log.warn("Failed to parse JWT: {}", ex.getMessage());
+      return null;
+    }
   }
 }

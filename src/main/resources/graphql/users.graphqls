@@ -1,24 +1,68 @@
 type User {
-  id: String
-  email: String
+  id: ID!
+  email: String!
   fullName: String
   provider: String
   createdAt: String
 }
 
 type AuthPayload {
-  token: String
-  user: User
+  token: String!
+  user: User!
 }
 
-type Query {
-  me: User
+enum DocumentVisibility {
+  PRIVATE
+  RESTRICTED
+  PUBLIC
+}
+
+enum DocumentRole {
+  VIEWER
+  COMMENTER
+  EDITOR
+  OWNER
+}
+
+type Document {
+  id: ID!
+  ownerUserId: ID!
+  owner: User
+  title: String!
+  storageKey: String
+  mimeType: String
+  size: Float
+  visibility: DocumentVisibility!
+  createdAt: String
+  updatedAt: String
+}
+
+type DocumentEdge {
+  cursor: String!
+  node: Document!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type DocumentConnection {
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
 }
 
 type Mutation {
   login(email: String!, password: String!): AuthPayload
-
   register(fullName: String!, email: String!, password: String!): AuthPayload
-
   loginWithGoogle(idToken: String!): AuthPayload
+  createDocument(title: String!, visibility: DocumentVisibility = PRIVATE): Document!
+  shareWithUser(documentId: ID!, email: String!, role: DocumentRole!): Boolean!
+  createLinkShare(documentId: ID!, role: DocumentRole!, expiresAt: String): String!
+}
+
+type Query {
+  me: User
+  document(id: ID!): Document
+  documents(first: Int = 20, after: String): DocumentConnection!
 }

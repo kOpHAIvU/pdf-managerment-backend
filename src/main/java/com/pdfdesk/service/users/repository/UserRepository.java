@@ -17,6 +17,10 @@ public class UserRepository {
     table.putItem(user);
   }
 
+  public User findById(String id) {
+    return table.getItem(Key.builder().partitionValue(id).build());
+  }
+
   public User findByEmail(String email) {
     DynamoDbIndex<User> index = table.index("email-index");
 
