@@ -12,6 +12,19 @@ spring:
     path: /graphql
     graphiql:
       enabled: true
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: all
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 server:
   port: 8080
@@ -20,3 +33,19 @@ logging:
   level:
     com.pdfdesk.service.auth: INFO
     com.pdfdesk.service.google: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} traceId=%X{traceId} spanId=%X{spanId} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+
+security:
+  rate-limit:
+    capacity: ${RATE_LIMIT_CAPACITY:120}
+    refill-per-minute: ${RATE_LIMIT_REFILL_PER_MINUTE:120}

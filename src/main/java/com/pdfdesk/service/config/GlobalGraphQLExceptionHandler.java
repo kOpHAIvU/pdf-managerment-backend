@@ -1,6 +1,8 @@
 package com.pdfdesk.service.config;
 
 import com.pdfdesk.service.auth.exception.AuthException;
+import com.pdfdesk.service.common.ForbiddenException;
+import com.pdfdesk.service.common.NotFoundException;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import org.jspecify.annotations.NonNull;
@@ -21,6 +23,30 @@ public class GlobalGraphQLExceptionHandler extends DataFetcherExceptionResolverA
               .path(env.getExecutionStepInfo().getPath())
               .extensions(Map.of("code", authEx.getCode()))
               .build();
+    }
+
+    if (ex instanceof ForbiddenException) {
+      return GraphqlErrorBuilder.newError()
+          .message(ex.getMessage())
+          .path(env.getExecutionStepInfo().getPath())
+          .extensions(Map.of("code", "FORBIDDEN"))
+          .build();
+    }
+
+    if (ex instanceof NotFoundException) {
+      return GraphqlErrorBuilder.newError()
+          .message(ex.getMessage())
+          .path(env.getExecutionStepInfo().getPath())
+          .extensions(Map.of("code", "NOT_FOUND"))
+          .build();
+    }
+
+    if (ex instanceof IllegalArgumentException) {
+      return GraphqlErrorBuilder.newError()
+          .message(ex.getMessage())
+          .path(env.getExecutionStepInfo().getPath())
+          .extensions(Map.of("code", "BAD_REQUEST"))
+          .build();
     }
 
     return GraphqlErrorBuilder.newError()
