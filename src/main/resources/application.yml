@@ -25,9 +25,17 @@ spring:
       retries: 3
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  servlet:
+    multipart:
+      max-file-size: ${MAX_UPLOAD_FILE_SIZE:10MB}
+      max-request-size: ${MAX_UPLOAD_REQUEST_SIZE:10MB}
 
 server:
   port: 8080
+
+storage:
+  local:
+    upload-dir: ${LOCAL_UPLOAD_DIR:uploads}
 
 logging:
   level:
@@ -46,6 +54,9 @@ management:
       probability: 1.0
 
 security:
+  jwt:
+    secret: ${JWT_SECRET:replace-with-a-long-random-secret-key-at-least-32-bytes}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
   rate-limit:
     capacity: ${RATE_LIMIT_CAPACITY:120}
     refill-per-minute: ${RATE_LIMIT_REFILL_PER_MINUTE:120}

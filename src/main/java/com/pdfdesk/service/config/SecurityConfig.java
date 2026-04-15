@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.web.SecurityFilterChain;
+import com.pdfdesk.service.security.JwtAuthenticationFilter;
 import com.pdfdesk.service.security.RateLimitingFilter;
 
 @Configuration
@@ -22,9 +23,11 @@ public class SecurityConfig {
   private String allowedOrigins;
 
   private final RateLimitingFilter rateLimitingFilter;
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-  public SecurityConfig(RateLimitingFilter rateLimitingFilter) {
+  public SecurityConfig(RateLimitingFilter rateLimitingFilter, JwtAuthenticationFilter jwtAuthenticationFilter) {
     this.rateLimitingFilter = rateLimitingFilter;
+    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
   }
 
   @Bean
@@ -39,6 +42,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers(
+                            "/api/auth/**",
                             "/graphql",
                             "/graphiql",
                             "/oauth2/**",
@@ -47,7 +51,8 @@ public class SecurityConfig {
                     ).permitAll()
                     .anyRequest().authenticated()
             )
-        .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(rateLimitingFilter, JwtAuthenticationFilter.class);
     return http.build();
   }
 
