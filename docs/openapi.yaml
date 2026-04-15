@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: PDF Desk Backend API
+  version: 1.0.0
+  description: REST API for PDF upload and metadata management.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/pdfs:
+    post:
+      summary: Upload a PDF
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: PDF uploaded
+    get:
+      summary: List PDFs
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 10
+        - in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paginated list
+  /api/pdfs/{pdfId}:
+    patch:
+      summary: Update PDF metadata
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: pdfId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [filename]
+              properties:
+                filename:
+                  type: string
+      responses:
+        '200':
+          description: Updated
+    delete:
+      summary: Delete PDF
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: pdfId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
