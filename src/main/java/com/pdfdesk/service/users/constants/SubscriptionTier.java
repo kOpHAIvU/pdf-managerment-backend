@@ -1,4 +1,5 @@
 package com.pdfdesk.service.users.constants;
 
-public class SubscriptionTier {
+public enum SubscriptionTier {
+  FREE, STARTER, PRO
 }

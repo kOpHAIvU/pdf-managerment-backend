@@ -1,8 +1,35 @@
+type Payment {
+  subscription: PaymentSubscription!
+  transactions: [PaymentTransaction]!
+  preferredMethod: String
+}
+
+type PaymentSubscription {
+  tier: String
+  status: String
+  startDate: String
+  endData: String
+  autoRenew: Boolean
+}
+
+type PaymentTransaction {
+  transactionId: String
+  method: String
+  tier: String
+  amount: Int
+  currency: String
+  status: String
+  createdAt: String
+  paidAt: String
+  rawResponse: String
+}
+
 type User {
   id: ID!
   email: String!
   fullName: String
   provider: String
+  payment: Payment
   createdAt: String
 }
 
@@ -62,7 +89,7 @@ type Mutation {
 }
 
 type Query {
-  me: User
+  getCurrentUser: User
   document(id: ID!): Document
   documents(first: Int = 20, after: String): DocumentConnection!
 }

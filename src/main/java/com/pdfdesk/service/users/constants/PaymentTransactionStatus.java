@@ -1,4 +1,5 @@
 package com.pdfdesk.service.users.constants;
 
-public class PaymentTransactionStatus {
+public enum PaymentTransactionStatus {
+  PENDING, SUCCESS, FAILED, REFUNDED
 }

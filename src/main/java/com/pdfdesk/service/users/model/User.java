@@ -11,6 +11,7 @@ public class User {
   private String fullName;
   private String passwordHash;
   private String provider;
+  private Payment payment;
   private String createdAt;
 
   @DynamoDbPartitionKey

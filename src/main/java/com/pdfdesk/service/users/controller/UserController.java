@@ -25,7 +25,7 @@ public class UserController {
   }
 
   @QueryMapping
-  public User me() {
+  public User getCurrentUser() {
     String userId = currentUserProvider.getCurrentUserId();
     if (userId == null) {
       return null;
